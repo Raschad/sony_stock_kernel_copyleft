@@ -200,6 +200,7 @@ static int get_pname(struct task_struct *task, char *zeroed_page)
 	int offset;
 	void *maddr;
 	struct page *page = NULL;
+	int pinned_page_num;
 
 	if (!mm)
 		return 0;
@@ -209,7 +210,14 @@ static int get_pname(struct task_struct *task, char *zeroed_page)
 	}
 	arg_len = mm->arg_end - mm->arg_start;
 
-	get_user_pages(task, mm, mm->arg_start, 1, 0, 1, &page, &vma);
+	pinned_page_num = get_user_pages(task, mm, mm->arg_start, 1, 0, 1,
+		&page, &vma);
+	/* Since we're asking for 1 user page, this function should return 1 */
+	if (pinned_page_num != 1) {
+		mmput(mm);
+		return 0;
+	}
+
 	offset = mm->arg_start & (PAGE_SIZE-1);
 	if (arg_len > PAGE_SIZE-offset)
 		arg_len = PAGE_SIZE-offset;
@@ -728,7 +736,7 @@ static void dump_common_audit_data_part(struct common_audit_data *ad, char type,
 		break;
 	}
 	case STRING_LSM_AUDIT_DATA_OPRES:
-		snprintf(&string_work[strlen(string_work)], STRING_PART_LEN_MAX-strlen(string_work), " op_res=%d", ad->selinux_audit_data->slad->op_result);
+		snprintf(&string_work[strlen(string_work)], STRING_PART_LEN_MAX-strlen(string_work), " op_res=%d", ad->selinux_audit_data->slad->result);
 		if (ad->tsk)
 			tsk = ad->tsk;
 		if (tsk && tsk->pid) {
