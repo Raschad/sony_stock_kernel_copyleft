@@ -1,5 +1,5 @@
 /* Copyright (c) 2011-2014, The Linux Foundation. All rights reserved.
- * Copyright (C) 2014 Sony Mobile Communications Inc.
+ * Copyright (C) 2015 Sony Mobile Communications Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -21,7 +21,6 @@
 #include <mach/rpm-regulator-smd.h>
 #include <linux/regulator/consumer.h>
 
-#define I2C_USER_REG_DATA_MAX 1024
 /*#define CONFIG_MSMB_CAMERA_DEBUG*/
 #undef CDBG
 #ifdef CONFIG_MSMB_CAMERA_DEBUG
@@ -1051,8 +1050,13 @@ int msm_sensor_config(struct msm_sensor_ctrl_t *s_ctrl, void __user *argp)
 				break;
 			}
 			s_ctrl->sensor_state = MSM_SENSOR_POWER_UP;
+#if defined(CONFIG_SONY_CAM_V4L2)
+			pr_info("%s:%d sensor state %d\n", __func__, __LINE__,
+				s_ctrl->sensor_state);
+#else
 			pr_err("%s:%d sensor state %d\n", __func__, __LINE__,
 				s_ctrl->sensor_state);
+#endif
 		} else {
 			rc = -EFAULT;
 		}
@@ -1078,8 +1082,13 @@ int msm_sensor_config(struct msm_sensor_ctrl_t *s_ctrl, void __user *argp)
 				break;
 			}
 			s_ctrl->sensor_state = MSM_SENSOR_POWER_DOWN;
+#if defined(CONFIG_SONY_CAM_V4L2)
+			pr_info("%s:%d sensor state %d\n", __func__, __LINE__,
+				s_ctrl->sensor_state);
+#else
 			pr_err("%s:%d sensor state %d\n", __func__, __LINE__,
 				s_ctrl->sensor_state);
+#endif
 		} else {
 			rc = -EFAULT;
 		}
