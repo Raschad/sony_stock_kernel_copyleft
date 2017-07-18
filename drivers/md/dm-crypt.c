@@ -1441,6 +1441,12 @@ static int crypt_ctr_cipher(struct dm_target *ti,
 	if (!cipher_api)
 		goto bad_mem;
 
+#ifdef CONFIG_CRYPTO_DEV_KFIPS
+	if (!strncmp(cipher, "aes", 32) &&
+	    (!strncmp(chainmode, "cbc", 4) || !strncmp(chainmode, "xts", 4)))
+		cipher = "fipsaes";
+#endif
+
 	ret = snprintf(cipher_api, CRYPTO_MAX_ALG_NAME,
 		       "%s(%s)", chainmode, cipher);
 	if (ret < 0) {
@@ -1641,6 +1647,7 @@ static int crypt_ctr(struct dm_target *ti, unsigned int argc, char **argv)
 
 	ret = -ENOMEM;
 	cc->io_queue = alloc_workqueue("kcryptd_io",
+				       WQ_HIGHPRI|
 				       WQ_NON_REENTRANT|
 				       WQ_MEM_RECLAIM,
 				       1);
@@ -1650,8 +1657,8 @@ static int crypt_ctr(struct dm_target *ti, unsigned int argc, char **argv)
 	}
 
 	cc->crypt_queue = alloc_workqueue("kcryptd",
-					  WQ_NON_REENTRANT|
-					  WQ_CPU_INTENSIVE|
+					  WQ_HIGHPRI|
+				       	  WQ_NON_REENTRANT|
 					  WQ_MEM_RECLAIM,
 					  1);
 	if (!cc->crypt_queue) {
