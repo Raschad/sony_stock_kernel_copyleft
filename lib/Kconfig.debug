@@ -143,6 +143,11 @@ config DEBUG_SECTION_MISMATCH
 	  - Enable verbose reporting from modpost in order to help resolve
 	    the section mismatches that are reported.
 
+config NO_ERROR_ON_MISMATCH
+	bool "Enable full Section mismatch analysis to give no error during compile"
+	help
+	  nothing here.
+
 config DEBUG_KERNEL
 	bool "Kernel debugging"
 	help
