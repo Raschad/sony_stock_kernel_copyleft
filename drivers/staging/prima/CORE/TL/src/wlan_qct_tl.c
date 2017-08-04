@@ -7296,19 +7296,6 @@ WLANTL_TLDebugMessage
             return;
         }
    }
-   if(debugFlags & WLANTL_DEBUG_KICKDXE)
-   {
-        vosMsg.reserved = 0;
-        vosMsg.bodyptr  = NULL;
-        vosMsg.type     = WLANTL_TX_KICKDXE;
-
-        status = vos_tx_mq_serialize( VOS_MODULE_ID_TL, &vosMsg);
-        if(status != VOS_STATUS_SUCCESS)
-        {
-            TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR, "TX Msg Posting Failed with status: %d",status));
-            return;
-        }
-   }
    return;
 }
 
@@ -8448,6 +8435,8 @@ WLANTL_STARxConn
         TLLOGE(VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                "WLAN TL:Invalid tid  %d (Station ID %d) on %s",
                ucTid, ucSTAId, __func__));
+        vos_pkt_return_packet(vosDataBuff);
+        return VOS_STATUS_E_FAILURE;
       }
 
       TLLOG2(VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO_HIGH,
@@ -8850,6 +8839,8 @@ WLANTL_STARxAuth
     TLLOGE(VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
            "WLAN TL:Invalid tid  %d (Station ID %d) on %s",
            ucTid, ucSTAId, __func__));
+    vos_pkt_return_packet(vosDataBuff);
+    return VOS_STATUS_E_FAILURE;
   }
 
   /*------------------------------------------------------------------------
@@ -9456,10 +9447,6 @@ WLANTL_TxProcessMsg
 
   case WLANTL_TX_FW_DEBUG:
     vos_fwDumpReq(274, 0, 0, 0, 0, 1); //Async event
-    break;
-
-  case WLANTL_TX_KICKDXE:
-    WDA_TransportKickDxe();
     break;
 
   default:

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2015 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -290,7 +290,7 @@ extern spinlock_t hdd_context_lock;
 #define FW_STATS_CONTEXT_MAGIC  0x5022474E //FW STATS
 #define GET_FRAME_LOG_MAGIC   0x464c4f47   //FLOG
 #define MON_MODE_MSG_MAGIC 0x51436B3A //MON_MODE
-
+#define ANTENNA_CONTEXT_MAGIC 0x414E544E //ANTN
 #define MON_MODE_MSG_TIMEOUT 5000
 #define MON_MODE_START 1
 #define MON_MODE_STOP  0
@@ -1157,6 +1157,9 @@ struct hdd_adapter_s
 
    /* Time stamp for start RoC request */
    v_TIME_t startRocTs;
+
+   /* Currently used antenna Index*/
+   int antennaIndex;
 };
 
 #define WLAN_HDD_GET_STATION_CTX_PTR(pAdapter) (&(pAdapter)->sessionCtx.station)
@@ -1453,8 +1456,6 @@ struct hdd_context_s
 #ifdef WLAN_FEATURE_LINK_LAYER_STATS
     struct hdd_ll_stats_context ll_stats_context;
 #endif /* End of WLAN_FEATURE_LINK_LAYER_STATS */
-    unsigned long  last_suspend_success;
-    v_U32_t  continuous_suspend_fail_cnt;
 };
 
 
@@ -1705,7 +1706,6 @@ void hdd_init_frame_logging(hdd_context_t *pHddCtx);
 
 int hdd_enable_disable_ca_event(hdd_context_t *pHddCtx,
                                 tANI_U8* command, tANI_U8 cmd_len);
-void hdd_indicate_mgmt_frame(tSirSmeMgmtFrameInd *frame_ind);
 
 #ifdef WLAN_FEATURE_LINK_LAYER_STATS
 /**
@@ -1728,7 +1728,4 @@ static inline void hdd_init_ll_stat_ctx(void)
 }
 #endif /* WLAN_FEATURE_LINK_LAYER_STATS */
 void hdd_wlan_free_wiphy_channels(struct wiphy *wiphy);
-void hdd_initialize_adapter_common(hdd_adapter_t *pAdapter);
-
-
 #endif    // end #if !defined( WLAN_HDD_MAIN_H )
