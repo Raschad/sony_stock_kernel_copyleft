@@ -242,7 +242,7 @@ struct r8a66597_platdata {
 
 /* Interrupt Enable Register 1 */
 #define	OVRCRE		0x8000	/* b15: Over-current interrupt */
-#define	BCHGE		0x4000	/* b14: USB us chenge interrupt */
+#define	BCHGE		0x4000	/* b14: USB us change interrupt */
 #define	DTCHE		0x1000	/* b12: Detach sense interrupt */
 #define	ATTCHE		0x0800	/* b11: Attach sense interrupt */
 #define	EOFERRE		0x0040	/* b6: EOF error interrupt */
@@ -328,7 +328,7 @@ struct r8a66597_platdata {
 
 /* Interrupt Status Register 1 */
 #define	OVRCR		0x8000	/* b15: Over-current interrupt */
-#define	BCHG		0x4000	/* b14: USB bus chenge interrupt */
+#define	BCHG		0x4000	/* b14: USB bus change interrupt */
 #define	DTCH		0x1000	/* b12: Detach sense interrupt */
 #define	ATTCH		0x0800	/* b11: Attach sense interrupt */
 #define	EOFERR		0x0040	/* b6: EOF-error interrupt */

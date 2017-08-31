@@ -6796,7 +6796,7 @@ lpfc_do_scr_ns_plogi(struct lpfc_hba *phba, struct lpfc_vport *vport)
 
 	/*
 	 * If lpfc_delay_discovery parameter is set and the clean address
-	 * bit is cleared and fc fabric parameters chenged, delay FC NPort
+	 * bit is cleared and fc fabric parameters changed, delay FC NPort
 	 * discovery.
 	 */
 	spin_lock_irq(shost->host_lock);

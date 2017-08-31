@@ -178,13 +178,13 @@ struct lcd_panel_info {
 	u32 display_clock;
 	u32 driver_ic_vbp;
 	u32 driver_ic_vfp;
-	u32 chenge_wait_update;
-	u32 chenge_wait_on_60fps;
-	u32 chenge_wait_on_45fps;
-	u32 chenge_wait_off_60fps;
-	u32 chenge_wait_off_45fps;
-	u32 chenge_wait_on_cmds_num;
-	u32 chenge_wait_off_cmds_num;
+	u32 change_wait_update;
+	u32 change_wait_on_60fps;
+	u32 change_wait_on_45fps;
+	u32 change_wait_off_60fps;
+	u32 change_wait_off_45fps;
+	u32 change_wait_on_cmds_num;
+	u32 change_wait_off_cmds_num;
 	u32 fps_threshold;
 	u32 te_c_update;
 	u32 te_c_mode_60fps_0;
@@ -193,8 +193,8 @@ struct lcd_panel_info {
 	u32 te_c_mode_45fps_1;
 	u32 te_c_cmds_num;
 	u32 te_c_payload_num;
-	u32 chenge_fps_cmds_num;
-	u32 chenge_fps_payload_num;
+	u32 change_fps_cmds_num;
+	u32 change_fps_payload_num;
 	char change_fps_susres_mode;
 };
 
@@ -365,6 +365,8 @@ struct mdss_panel_info {
 	u32 height_pix_align;
 	u32 min_width;
 	u32 min_height;
+	u32 min_fps;
+	u32 max_fps;
 
 	u32 cont_splash_enabled;
 	u32 partial_update_enabled;

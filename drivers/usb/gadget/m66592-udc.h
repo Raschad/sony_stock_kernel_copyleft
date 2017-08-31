@@ -150,7 +150,7 @@
 #define M66592_SERR	0x0001	/* b0: Sequence error interrupt */
 
 #define M66592_INTENB1	0x32
-#define M66592_BCHGE	0x4000	/* b14: USB us chenge interrupt */
+#define M66592_BCHGE	0x4000	/* b14: USB us change interrupt */
 #define M66592_DTCHE	0x1000	/* b12: Detach sense interrupt */
 #define M66592_SIGNE	0x0020	/* b5: SETUP IGNORE interrupt */
 #define M66592_SACKE	0x0010	/* b4: SETUP ACK interrupt */
@@ -229,7 +229,7 @@
 #define   M66592_CS_IDST	 0x0000	  /* Idle or setup stage */
 
 #define M66592_INTSTS1		0x42
-#define M66592_BCHG		0x4000	/* b14: USB bus chenge interrupt */
+#define M66592_BCHG		0x4000	/* b14: USB bus change interrupt */
 #define M66592_DTCH		0x1000	/* b12: Detach sense interrupt */
 #define M66592_SIGN		0x0020	/* b5: SETUP IGNORE interrupt */
 #define M66592_SACK		0x0010	/* b4: SETUP ACK interrupt */

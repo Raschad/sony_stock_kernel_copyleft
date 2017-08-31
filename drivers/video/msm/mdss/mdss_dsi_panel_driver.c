@@ -761,8 +761,8 @@ static int mdss_dsi_panel_change_fps_fpks_calc
 		pr_info("%s: clk=%d vbp=%d vfp=%d yres=%d rtn=0x%x\n",
 			__func__, clk, vbp, vfp, yres, rtn);
 
-		fps_cmds = pinfo->lcdc.chenge_fps_cmds_num;
-		fps_payload = pinfo->lcdc.chenge_fps_payload_num;
+		fps_cmds = pinfo->lcdc.change_fps_cmds_num;
+		fps_payload = pinfo->lcdc.change_fps_payload_num;
 		CHENGE_FPS_REG(fps_cmds, fps_payload) = rtn;
 
 		pinfo->mipi.frame_rate = dfps;
@@ -932,7 +932,7 @@ static void mdss_dsi_panel_wait_change(
 	char *wait = NULL;
 	char wait_60fps, wait_45fps;
 	u32 te_c_update = pinfo->lcdc.te_c_update;
-	u32 wait_update = pinfo->lcdc.chenge_wait_update;
+	u32 wait_update = pinfo->lcdc.change_wait_update;
 	u32 fpks = pinfo->mipi.input_fpks;
 	u32 cmds_num;
 
@@ -940,25 +940,25 @@ static void mdss_dsi_panel_wait_change(
 		goto exit;
 
 	if (onoff) {
-		cmds_num = pinfo->lcdc.chenge_wait_on_cmds_num;
+		cmds_num = pinfo->lcdc.change_wait_on_cmds_num;
 		cmds_cmds = &ctrl_pdata->on_cmds.cmds[cmds_num];
 		if (cmds_cmds)
 			wait = &ctrl_pdata->on_cmds.cmds[cmds_num].dchdr.wait;
 		else
 			goto exit;
 
-		wait_60fps = (char)pinfo->lcdc.chenge_wait_on_60fps;
-		wait_45fps = (char)pinfo->lcdc.chenge_wait_on_45fps;
+		wait_60fps = (char)pinfo->lcdc.change_wait_on_60fps;
+		wait_45fps = (char)pinfo->lcdc.change_wait_on_45fps;
 	} else {
-		cmds_num = pinfo->lcdc.chenge_wait_off_cmds_num;
+		cmds_num = pinfo->lcdc.change_wait_off_cmds_num;
 		cmds_cmds = &ctrl_pdata->off_cmds.cmds[cmds_num];
 		if (cmds_cmds)
 			wait = &ctrl_pdata->off_cmds.cmds[cmds_num].dchdr.wait;
 		else
 			goto exit;
 
-		wait_60fps = (char)pinfo->lcdc.chenge_wait_off_60fps;
-		wait_45fps = (char)pinfo->lcdc.chenge_wait_off_45fps;
+		wait_60fps = (char)pinfo->lcdc.change_wait_off_60fps;
+		wait_45fps = (char)pinfo->lcdc.change_wait_off_45fps;
 	}
 
 	if (fpks > pinfo->lcdc.fps_threshold)
@@ -1080,8 +1080,8 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 	if (ctrl_pdata->panel_data.panel_info.mipi.mode == DSI_CMD_MODE) {
 		if (ctrl_pdata->fps_cmds.cmd_cnt) {
 			pinfo = &ctrl_pdata->panel_data.panel_info;
-			fps_cmds = pinfo->lcdc.chenge_fps_cmds_num;
-			fps_payload = pinfo->lcdc.chenge_fps_payload_num;
+			fps_cmds = pinfo->lcdc.change_fps_cmds_num;
+			fps_payload = pinfo->lcdc.change_fps_payload_num;
 			rtn = CHENGE_FPS_REG(fps_cmds, fps_payload);
 			pr_debug("%s: change fps sequence --- rtn = 0x%x\n",
 				__func__, rtn);
@@ -2661,7 +2661,7 @@ static int mdss_panel_parse_dt(struct device_node *np,
 		spec_pdata->down_period = !rc ? tmp : 0;
 
 		mdss_dsi_parse_dcs_cmds(next, &ctrl_pdata->fps_cmds,
-			"somc,chenge-fps-command", NULL);
+			"somc,change-fps-command", NULL);
 		rc = of_property_read_u32(next,
 			"somc,fps_default", &tmp);
 		pinfo->lcdc.fps_default = !rc ? tmp : 0x8E;
@@ -2694,20 +2694,20 @@ static int mdss_panel_parse_dt(struct device_node *np,
 		}
 
 		rc = of_property_read_u32(next,
-			"somc,chenge-wait-update", &tmp);
-		pinfo->lcdc.chenge_wait_update =  !rc ? tmp : 0;
+			"somc,change-wait-update", &tmp);
+		pinfo->lcdc.change_wait_update =  !rc ? tmp : 0;
 		rc = of_property_read_u32_array(next,
-			"somc,chenge-wait-on", res, 2);
-		pinfo->lcdc.chenge_wait_on_60fps = !rc ? res[0] : 0;
-		pinfo->lcdc.chenge_wait_on_45fps = !rc ? res[1] : 0;
+			"somc,change-wait-on", res, 2);
+		pinfo->lcdc.change_wait_on_60fps = !rc ? res[0] : 0;
+		pinfo->lcdc.change_wait_on_45fps = !rc ? res[1] : 0;
 		rc = of_property_read_u32_array(next,
-			"somc,chenge-wait-off", res, 2);
-		pinfo->lcdc.chenge_wait_off_60fps = !rc ? res[0] : 0;
-		pinfo->lcdc.chenge_wait_off_45fps = !rc ? res[1] : 0;
+			"somc,change-wait-off", res, 2);
+		pinfo->lcdc.change_wait_off_60fps = !rc ? res[0] : 0;
+		pinfo->lcdc.change_wait_off_45fps = !rc ? res[1] : 0;
 		rc = of_property_read_u32_array(next,
-			"somc,chenge-wait-cmds-num", res, 2);
-		pinfo->lcdc.chenge_wait_on_cmds_num = !rc ? res[0] : 0;
-		pinfo->lcdc.chenge_wait_off_cmds_num = !rc ? res[1] : 0;
+			"somc,change-wait-cmds-num", res, 2);
+		pinfo->lcdc.change_wait_on_cmds_num = !rc ? res[0] : 0;
+		pinfo->lcdc.change_wait_off_cmds_num = !rc ? res[1] : 0;
 		rc = of_property_read_u32(next,
 			"somc,fps-threshold", &tmp);
 		pinfo->lcdc.fps_threshold =  !rc ? tmp : 0;
@@ -2729,11 +2729,11 @@ static int mdss_panel_parse_dt(struct device_node *np,
 			"somc,te-c-payload-num", &tmp);
 		pinfo->lcdc.te_c_payload_num =  !rc ? tmp : 0;
 		rc = of_property_read_u32(next,
-			"somc,chenge-fps-cmds-num", &tmp);
-		pinfo->lcdc.chenge_fps_cmds_num = !rc ? tmp : 0;
+			"somc,change-fps-cmds-num", &tmp);
+		pinfo->lcdc.change_fps_cmds_num = !rc ? tmp : 0;
 		rc = of_property_read_u32(next,
-			"somc,chenge-fps-payload-num", &tmp);
-		pinfo->lcdc.chenge_fps_payload_num = !rc ? tmp : 0;
+			"somc,change-fps-payload-num", &tmp);
+		pinfo->lcdc.change_fps_payload_num = !rc ? tmp : 0;
 		pinfo->lcdc.change_fps_susres_mode = of_property_read_bool(np,
 			"somc,change-fps-suspend-resume-mode");
 
